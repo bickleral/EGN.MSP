@@ -1,0 +1,38 @@
+#include <msp430g2553.h>
+
+void main(void)
+{
+    WDTCTL = WDTPW + WDTHOLD;
+    P1DIR = BIT0;
+    P1REN = BIT3;
+    while(1)
+    {
+
+        if((P1IN & BIT3)!=BIT3)
+        {
+
+        P1DIR |= (BIT0+BIT6);           // P1.0 (GREEN LED), P1.1 (RED LED)
+        volatile unsigned long i, j, k;
+            while(1)
+            {
+                P1OUT &= ~BIT6;             //RED LED -> OFF
+
+
+                for(i = 0; i<20000; i++);   //delay, at tempo of about 72 bpm, for a 1/4th of beat
+                P1OUT |= BIT6;              //RED LED -> ON
+                P1OUT |= BIT0;              //GREEN LED -> ON
+
+                for(j=0; j<10; j++);
+                P1OUT &= ~BIT6;             //RED LED -> OFF
+                P1OUT &= ~BIT0;             //GREEN LED -> OFF
+
+
+                for(i = 0; i<10000; i++);   //delays for 1/8th of beat
+                P1OUT |= BIT6;              //RED LED -> ON
+
+                for(i = 0; i<10000; i++);   //delays for 1/8tj of beat
+
+            }
+        }
+     }
+}
